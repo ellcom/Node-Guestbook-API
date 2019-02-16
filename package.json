@@ -1,0 +1,16 @@
+{
+  "name": "node_server_ios",
+  "version": "1.0.0",
+  "description": "Basic guestbook app for iOS",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "srart" : "node index.js"
+  },
+  "author": "Elliot Adderton <e.adderton@liverpool.ac.uk>",
+  "license": "GPL-3.0",
+  "dependencies": {
+    "express": "^4.16.4",
+    "sqlite": "^3.0.2"
+  }
+}
