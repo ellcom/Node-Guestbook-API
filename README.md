@@ -36,6 +36,13 @@ Example response:
 {"code":1,"data":[{"message":"World","created":"2019-02-16 17:27:07"},{"message":"Hello","created":"2019-02-16 18:10:45"}]}
 ```
 
+A fail response will look like:
+
+```javascript
+{"code":-1,"info":"Message not supplied"}
+```
+
+
 The struct response for messages in Swift is:
 
 ```swift

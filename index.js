@@ -61,10 +61,10 @@ app.get('/addMessage', function (req, res) {
       return console.log(err.message);
     }
     // get the last insert id
-    res.json({code : 1, info : `A row has been inserted with rowid ${this.lastID}`});
+    res.json({code : 1, info : `A message has been inserted with rowid ${this.lastID}`});
   });
 });
 
 app.listen(3000, function () {
-  console.log('Example app listening on port 3000!');
+  console.log('Guestbook API listening on port 3000!');
 });
