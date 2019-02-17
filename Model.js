@@ -32,7 +32,7 @@ exports.getMessages = function()
   return new Promise( (resolve, reject) => {
     db.all(sql, [], (err, rows) => {
       if (err) {
-        reject({code : -1, info : `Error has occured ${err.message}`});
+        reject({code : -1, info : `Error has occurred ${err.message}`});
         return;
       }
       
@@ -49,7 +49,7 @@ exports.addMessage = function(message)
   return new Promise( (resolve, reject) => {
     db.run(sql, [message], function(err) {
       if (err) {
-        reject({code : -1, info : `Error has occured ${err.message}`});
+        reject({code : -1, info : `Error has occurred ${err.message}`});
         return;
       }
       // get the last insert id
