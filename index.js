@@ -1,68 +1,40 @@
-var express = require('express');
-var app = express();
-
-
-const sqlite3 = require('sqlite3').verbose();
-let db = new sqlite3.Database(':memory:', (err) => {
-  if (err) {
-    return console.error(err.message);
-  }
-  console.log('Connected to the in-memory SQlite database.');
-
-  db.run(
-          `CREATE TABLE guestbook (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            message TEXT,
-            created TIMESTAMP
-          )`
-        );
-});
+let app = require('express')();
+let Model = require('./Model');
 
 process.on('SIGTERM', shutDown);
 process.on('SIGINT', shutDown);
 
-function shutDown()
-{
-  db.close((err) => {
-    if (err) {
-      return console.error(err.message);
-    }
-    console.log('Close the database connection.');
-    process.exit(0);
-  });
+function shutDown() {
+  Model.shutdown();
 }
 
-app.get('/messages', function (req, res) {
-  let sql = `SELECT message, created FROM guestbook order by created`;
- 
-    db.all(sql, [], (err, rows) => {
-      if (err) {
-        res.json({code : -1, info : `Error has occured ${err.message}`});
-        return console.log(err.message);
-      }
-      
-      res.json({code: 1, data : rows});
-    });
+app.get('/messages', function (req, res){
+  Model
+    .getMessages()
+    .then( 
+      data => res.json(data), 
+      data => {
+        console.log(data.info);
+        res.json(data);
+      });
 });
 
 app.get('/addMessage', function (req, res) {
+  let message = req.query.message;
 
-  const message = req.query.message;
-
-  if( message == undefined || message.length == 0 )
-  {
+  if( message == undefined || message.length == 0 ) {
     res.json({code : -1, info : "Message not supplied"});
     return;
   }
 
-  db.run(`INSERT INTO guestbook(message, created) VALUES(?,CURRENT_TIMESTAMP)`, [message], function(err) {
-    if (err) {
-      res.json({code : -1, info : `Error has occured ${err.message}`});
-      return console.log(err.message);
-    }
-    // get the last insert id
-    res.json({code : 1, info : `A message has been inserted with rowid ${this.lastID}`});
-  });
+  Model
+    .addMessage(message)
+    .then( 
+      data => res.json(data), 
+      data => {
+        console.log(data.info);
+        res.json(data);
+      });
 });
 
 app.listen(3000, function () {
